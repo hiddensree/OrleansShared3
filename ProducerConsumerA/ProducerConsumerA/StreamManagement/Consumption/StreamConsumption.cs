@@ -13,7 +13,7 @@ public class StreamConsumption(ILogger<IStreamConsumption> logger) : IStreamCons
         string streamId
     )
     {
-        var stream = streamProvider.GetStream<MachineData>(streamId, streamNamespace);
+        var stream = streamProvider.GetStream<StreamData>(streamId, streamNamespace);
         logger.LogInformation(
             "Consuming stream {StreamId} in namespace {StreamNamespace}",
             streamId,

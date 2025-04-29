@@ -38,16 +38,10 @@ public class GrainB(
 
     public async Task StartProducingAsync()
     {
-        _logger.LogInformation(
-            "GrainB StartProducingAsync: Producing for {GrainId}",
-            this.GetPrimaryKey()
-        );
-        var data = new MachineData
+        var data = new StreamData
         {
-            Source = "Controller",
-            MachineName = "ControllerMachine",
+            Source = "Controller Stream Data",
             Value = Random.Shared.Next(1, 1000),
-            Timestamp = DateTime.UtcNow,
         };
         var streamProvider = this.GetStreamProvider(StreamProviderName);
         await _streamProduction.ProduceStatisticsForFieldConnectorAsync(
@@ -85,7 +79,7 @@ public class GrainB(
                 streamNamespace
             );
             // Produce data after subscription to test the loop
-            await StartProducingAsync();
+            //await StartProducingAsync();
         }
         catch (Exception ex)
         {
@@ -97,6 +91,16 @@ public class GrainB(
             );
             throw;
         }
+    }
+
+    public Task StopGrainBAsync()
+    {
+        _logger.LogInformation(
+            "GrainB StopGrainBAsync: Stopping for {GrainId}",
+            this.GetPrimaryKey()
+        );
+        DeactivateOnIdle();
+        return Task.CompletedTask;
     }
 
     public override Task OnDeactivateAsync(

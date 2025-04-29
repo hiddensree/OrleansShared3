@@ -9,6 +9,6 @@ public interface IStreamProduction
         IStreamProvider streamProvider,
         string streamNamespace,
         string streamId,
-        MachineData data
+        StreamData data
     );
 }

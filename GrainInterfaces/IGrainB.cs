@@ -12,4 +12,7 @@ public interface IGrainB : IGrainWithGuidKey
 
     [Alias("ActivateAsync")]
     Task ActivateAsync();
+
+    [Alias("StopGrainBAsync")]
+    Task StopGrainBAsync();
 }

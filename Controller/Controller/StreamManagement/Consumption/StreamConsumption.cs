@@ -49,6 +49,8 @@ public class StreamConsumption(ILogger<IStreamConsumption> logger, IGrainFactory
 
                     // Call a method on GrainB
                     await grainB.StartProducingAsync();
+                    await grainB.StopGrainBAsync();
+
                     await Task.CompletedTask;
                 },
                 (exception) =>

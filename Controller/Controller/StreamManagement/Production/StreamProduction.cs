@@ -10,12 +10,12 @@ public class StreamProduction(ILogger<IStreamProduction> logger) : IStreamProduc
         IStreamProvider streamProvider,
         string streamNamespace,
         string streamId,
-        MachineData data
+        StreamData data
     )
     {
         try
         {
-            var stream = streamProvider.GetStream<MachineData>(streamId, streamNamespace);
+            var stream = streamProvider.GetStream<StreamData>(streamId, streamNamespace);
             logger.LogInformation(
                 "Producing data for stream {StreamId} in namespace {StreamNamespace}",
                 streamId,
