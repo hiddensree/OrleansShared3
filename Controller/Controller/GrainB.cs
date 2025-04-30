@@ -1,13 +1,15 @@
-using Controller.StreamManagement.Consumption;
-using Controller.StreamManagement.Production;
-using GrainInterfaces;
+
+using LimPocHelperFramework.Grains;
+using LimPocHelperFramework.Models;
+using LimPocHelperFramework.StreamManagement.Consumption;
+using LimPocHelperFramework.StreamManagement.Production;
 using Microsoft.Extensions.Logging;
 
 namespace Controller;
 
 public class GrainB(
-    IStreamProduction streamProduction,
-    IStreamConsumption streamConsumption,
+    IStreamProduction<StreamData> streamProduction,
+    IStreamConsumption<MachineData> streamConsumption,
     ILogger<IGrainB> logger
 ) : Grain, IGrainB
 {
@@ -17,8 +19,8 @@ public class GrainB(
     private const string StreamNamespace = "field";
     private const string StreamId = "field";
     private readonly ILogger<IGrainB> _logger = logger;
-    private readonly IStreamProduction _streamProduction = streamProduction;
-    private readonly IStreamConsumption _streamConsumption = streamConsumption;
+    private readonly IStreamProduction<StreamData> _streamProduction = streamProduction;
+    private readonly IStreamConsumption<MachineData> _streamConsumption = streamConsumption;
 
     public override Task OnActivateAsync(CancellationToken cancellationToken)
     {
@@ -44,7 +46,7 @@ public class GrainB(
             Value = Random.Shared.Next(1, 1000),
         };
         var streamProvider = this.GetStreamProvider(StreamProviderName);
-        await _streamProduction.ProduceStatisticsForFieldConnectorAsync(
+        await _streamProduction.ProduceAsync(
             streamProvider,
             StreamControllerNamespace,
             StreamControllerId,
@@ -72,14 +74,25 @@ public class GrainB(
                 streamProviderName
             );
             var streamProvider = this.GetStreamProvider(streamProviderName);
-            await _streamConsumption.ConsumeProduction(streamProvider, streamNamespace, streamId);
+            await _streamConsumption.ConsumeAsync(
+                streamProvider,
+                streamNamespace,
+                streamId,
+                async (data, token) =>
+                {
+                    _logger.LogInformation("Machine Name: {MachineName}", data.MachineName);
+                    _logger.LogInformation("Data Source: {Source}", data.Source);
+                    _logger.LogInformation("Data Timestamp: {Timestamp}", data.Timestamp);
+
+                    await StartProducingAsync();
+                    //await StopGrainBAsync();
+                }
+            );
             _logger.LogInformation(
                 "GrainB Successfully set up consumption for stream {StreamId} in namespace {StreamNamespace}",
                 streamId,
                 streamNamespace
             );
-            // Produce data after subscription to test the loop
-            //await StartProducingAsync();
         }
         catch (Exception ex)
         {

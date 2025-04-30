@@ -16,6 +16,7 @@
 
 <ItemGroup>
     <ProjectReference Include="..\..\GrainInterfaces\GrainInterfaces.csproj" />
+    <ProjectReference Include="..\..\LimPocHelperFramework\LimPocHelperFramework.csproj" />
   </ItemGroup>
   
 

@@ -1,44 +1,21 @@
-﻿using GrainInterfaces.StreamManagement.Consumption;
-using GrainInterfaces.StreamManagement.Production;
+﻿using LimPocHelperFramework.Common;
+using LimPocHelperFramework.Grains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using Orleans.Configuration;
-using ProducerConsumerA;
-using ProducerConsumerA.StreamManagement.Consumption;
-using ProducerConsumerA.StreamManagement.Production;
 
-var host = new HostBuilder()
-    .UseOrleans(silo =>
-    {
-        silo.UseLocalhostClustering()
-            .AddStreaming()
-            .AddMemoryStreams("OrleansStream")
-            .UseLocalhostClustering(
-                siloPort: 11111,
-                gatewayPort: 30000,
-                primarySiloEndpoint: new System.Net.IPEndPoint(System.Net.IPAddress.Loopback, 11111)
-            )
-            .Configure<ClusterOptions>(options =>
-            {
-                options.ClusterId = "shared-cluster";
-                options.ServiceId = "shared-service";
-            })
-            .AddMemoryGrainStorage("PubSubStore")
-            .ConfigureLogging(logging => logging.AddConsole())
-            .AddStartupTask<ActivateGrainOnStartUpTask>()
-            .ConfigureServices(services =>
-            {
-                services.AddTransient<IStreamConsumption, StreamConsumption>();
-                services.AddTransient<IStreamProduction, StreamProduction>();
-            });
-    })
-    .Build();
+
+var host = new HostBuilder().ConfigureOrleansHost(siloPort: 11111, gatewayPort: 30000).Build();
 
 await host.StartAsync();
-Console.WriteLine("Orleans host started.");
+
+// Directly activate GrainA
+var grainFactory = host.Services.GetRequiredService<IGrainFactory>();
+var grainA = grainFactory.GetGrain<IGrainA>(Guid.NewGuid());
+await grainA.ActivateAsync(); // Call ActivateAsync defined in IGrainBase
+await grainA.StartProducingAsync(); // Start producing data
+
+Console.WriteLine("Orleans host started and GrainA activated.");
 Console.WriteLine("Press Enter to terminate...");
 Console.ReadLine();
 
-//await client.CloseAsync();
 await host.StopAsync();

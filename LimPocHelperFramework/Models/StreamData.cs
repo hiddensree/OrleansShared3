@@ -1,11 +1,9 @@
-using System;
-using Orleans;
-
-namespace GrainInterfaces;
+namespace LimPocHelperFramework.Models;
 
 [GenerateSerializer]
 [Serializable]
-public class StreamData
+[Alias("LimPocHelperFramework.Models.StreamData")]
+public class StreamData : IStreamData
 {
     [Id(0)]
     public string Source { get; set; } = string.Empty;

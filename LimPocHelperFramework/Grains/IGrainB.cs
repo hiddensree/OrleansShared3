@@ -1,7 +1,4 @@
-using Orleans;
-using Orleans.Streams;
-
-namespace GrainInterfaces;
+namespace LimPocHelperFramework.Grains;
 
 //[ImplicitStreamSubscription("StreamB")]
 [Alias("GrainInterfaces.IGrainB")]

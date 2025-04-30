@@ -12,4 +12,8 @@
     <PackageReference Include="Microsoft.Orleans.Streaming" Version="9.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LimPocHelperFramework\LimPocHelperFramework.csproj" />
+  </ItemGroup>
+
 </Project>
