@@ -3,7 +3,6 @@ using LimPocHelperFramework.Grains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-
 var host = new HostBuilder().ConfigureOrleansHost(siloPort: 11111, gatewayPort: 30000).Build();
 
 await host.StartAsync();

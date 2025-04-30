@@ -1,9 +1,7 @@
-﻿
-using LimPocHelperFramework.Common;
+﻿using LimPocHelperFramework.Common;
 using LimPocHelperFramework.Grains;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Orleans;
 
 var host = new HostBuilder()
     .ConfigureOrleansHost(siloPort: 11112, gatewayPort: 30001, dashboardPort: 8098)

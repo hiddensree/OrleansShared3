@@ -8,16 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="LimpocHelperFramework" Version="1.0.7" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
     <PackageReference Include="Microsoft.Orleans.Server" Version="9.1.2" />
     <PackageReference Include="Microsoft.Orleans.Streaming" Version="9.1.2" />
     <PackageReference Include="OrleansDashboard" Version="8.2.0" />
   </ItemGroup>
-
-<ItemGroup>
-    <ProjectReference Include="..\..\GrainInterfaces\GrainInterfaces.csproj" />
-    <ProjectReference Include="..\..\LimPocHelperFramework\LimPocHelperFramework.csproj" />
-  </ItemGroup>
-  
 
 </Project>

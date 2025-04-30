@@ -5,10 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans.Configuration;
-using Orleans.Hosting;
 
 namespace LimPocHelperFramework.Common;
 
+/// <summary>
+/// This class provides extension methods for configuring the Orleans host.
+/// </summary>
 public static class OrleansConfiguration
 {
     /// <summary>
@@ -32,14 +34,7 @@ public static class OrleansConfiguration
                 silo.UseLocalhostClustering()
                     .AddStreaming()
                     .AddMemoryStreams("OrleansStream")
-                    .UseLocalhostClustering(
-                        siloPort: siloPort,
-                        gatewayPort: gatewayPort,
-                        primarySiloEndpoint: new System.Net.IPEndPoint(
-                            System.Net.IPAddress.Loopback,
-                            11111
-                        )
-                    )
+                    .UseLocalhostClustering(siloPort: siloPort, gatewayPort: gatewayPort)
                     .Configure<ClusterOptions>(options =>
                     {
                         options.ClusterId = "shared-cluster";
